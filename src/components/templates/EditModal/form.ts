@@ -1,7 +1,7 @@
 import type { User } from "@/types/user";
 import { z } from "zod";
 
-export const formSchema = z.object({
+const formSchema = z.object({
   id: z.number(),
   name: z.string().min(2, {
     message: "name must be at least 2 characters.",
@@ -17,7 +17,7 @@ export const formSchema = z.object({
 });
 
 
-export const getDefaultValues = (data: User) => {
+const getDefaultValues = (data: User) => {
   return {
     id: data.id,
     name: data.name,
@@ -28,4 +28,6 @@ export const getDefaultValues = (data: User) => {
   };
 };
 
-export type FormSchema = z.infer<typeof formSchema>;
+ export type FormSchema = z.infer<typeof formSchema>;
+ 
+ export { getDefaultValues, formSchema }

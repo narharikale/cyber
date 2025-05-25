@@ -26,14 +26,12 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { EditModal } from "./EditModal/EditModal";
+import EditModal  from "./EditModal/EditModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { useGetUserdata } from "../../hooks/useGetUserdata";
-import { useDebounce } from "../../hooks/useDebounce";
-
-
+import useGetUserdata from "../../hooks/useGetUserdata";
+import useDebounce  from "../../hooks/useDebounce";
 
 function DataTable() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -41,7 +39,6 @@ function DataTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const itemsPerPage = 5;
-
 
   const debouncedSearch = useDebounce(searchQuery, 500);
 
@@ -53,24 +50,22 @@ function DataTable() {
     order: sortOrder,
   });
 
+
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: "id",
       header: ({}) => {
         return (
           <div className="flex items-center">
-          <p>Id</p>
-          
-          <Button
-            variant="ghost"
-            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-            className="flex items-center gap-1"
-          >
-            
+            <p>Id</p>
+            <Button
+              variant="ghost"
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+              className="flex items-center gap-1"
+            >
               <ArrowUpDown className="h-4 w-4" />
-          
-          </Button></div>
-          
+            </Button>
+          </div>
         );
       },
     },
@@ -94,7 +89,6 @@ function DataTable() {
       accessorKey: "website",
       header: "Website",
     },
-
     {
       accessorKey: "action",
       header: "Actions",
@@ -124,8 +118,8 @@ function DataTable() {
   };
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold mb-6">User Management</h1>
+    <div className="space-y-4 w-full">
+      <h1 className="text-3xl font-bold mb-6">User Management</h1>
       <div className="flex items-center justify-between">
         <Input
           placeholder="Search users..."
@@ -169,7 +163,7 @@ function DataTable() {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-left">
+                    <TableCell key={cell.id} className="text-left text-md">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -226,6 +220,7 @@ function DataTable() {
               />
             </PaginationItem>
           </PaginationContent>
+          
         </Pagination>
       </div>
     </div>

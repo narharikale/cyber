@@ -1,7 +1,8 @@
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,18 +11,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { formSchema, getDefaultValues, type FormSchema } from "./form";
-import type { User } from "@/types/user";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useUpdateUserData } from "@/hooks/updateUserData";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { formSchema, getDefaultValues, type FormSchema } from "./form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import useUpdateUserData  from "@/hooks/useUpdateUserData";
+
+import type { User } from "@/types/user";
+
 
 type Props = {
   isOpen: boolean;
@@ -29,7 +32,7 @@ type Props = {
   data: User;
 };
 
-export function EditModal({ isOpen, onClose, data }: Props) {
+function EditModal({ isOpen, onClose, data }: Props) {
   const { mutate: updateUser, isPending } = useUpdateUserData();
 
   const form = useForm({
@@ -59,10 +62,11 @@ export function EditModal({ isOpen, onClose, data }: Props) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent >
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
         </DialogHeader>
+        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -145,3 +149,5 @@ export function EditModal({ isOpen, onClose, data }: Props) {
     </Dialog>
   );
 }
+
+export default EditModal
