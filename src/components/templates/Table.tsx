@@ -1,3 +1,14 @@
+import { useState } from "react";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+
+import type { ColumnDef } from "@tanstack/react-table";
+import type { User } from "@/types/user";
+import { ArrowUpDown } from "lucide-react";
+
 import {
   Table,
   TableBody,
@@ -8,27 +19,20 @@ import {
 } from "@/components/ui/table";
 
 import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import type { ColumnDef } from "@tanstack/react-table";
-import type { User } from "@/types/user";
-import { Button } from "../ui/button";
-import { EditModal } from "./EditModal/EditModal";
-import { useState } from "react";
-import { Input } from "../ui/input";
-import { useGetUserdata } from "../../hooks/useGetUserdata";
-import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "../ui/pagination";
-import { ArrowUpDown } from "lucide-react";
+} from "@/components/ui/pagination";
+import { EditModal } from "./EditModal/EditModal";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import { useGetUserdata } from "../../hooks/useGetUserdata";
+import { useDebounce } from "../../hooks/useDebounce";
+
 
 type Props = {
   data: User[];
@@ -41,8 +45,11 @@ function DataTable({ data: initialData }: Props) {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const itemsPerPage = 5;
 
+
+  const debouncedSearch = useDebounce(searchQuery, 500);
+
   const { data, isLoading } = useGetUserdata({
-    search: searchQuery,
+    search: debouncedSearch,
     page: currentPage,
     limit: itemsPerPage,
     sort: "id",
