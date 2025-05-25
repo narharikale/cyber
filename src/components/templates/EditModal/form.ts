@@ -10,10 +10,10 @@ export const formSchema = z.object({
     message: "name must be at least 2 characters.",
   }),
   email: z.string().email(),
-  phone: z.string().regex(/^\+?[1-9]\d{7,14}$/, {
-    message: "Invalid phone number",
+  phone: z.string(),
+  website: z.string().min(6, {
+    message: "name must be at least 2 characters.",
   }),
-  website: z.string().url(),
 });
 
 

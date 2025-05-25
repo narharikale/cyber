@@ -7,7 +7,7 @@ import {
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { User } from "@/types/user";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Loader2 } from "lucide-react";
 
 import {
   Table,
@@ -34,11 +34,8 @@ import { useGetUserdata } from "../../hooks/useGetUserdata";
 import { useDebounce } from "../../hooks/useDebounce";
 
 
-type Props = {
-  data: User[];
-};
 
-function DataTable({ data: initialData }: Props) {
+function DataTable() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,16 +56,21 @@ function DataTable({ data: initialData }: Props) {
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: "id",
-      header: ({ }) => {
+      header: ({}) => {
         return (
+          <div className="flex items-center">
+          <p>Id</p>
+          
           <Button
             variant="ghost"
             onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
             className="flex items-center gap-1"
           >
-            ID
-            <ArrowUpDown className="h-4 w-4" />
-          </Button>
+            
+              <ArrowUpDown className="h-4 w-4" />
+          
+          </Button></div>
+          
         );
       },
     },
@@ -90,14 +92,21 @@ function DataTable({ data: initialData }: Props) {
     },
     {
       accessorKey: "website",
-      header: "website",
+      header: "Website",
     },
 
     {
       accessorKey: "action",
       header: "Actions",
       cell: ({ row }) => (
-        <Button variant="default" onClick={() => setEditingUser(row.original)}>
+        <Button 
+          variant="default" 
+          onClick={() => setEditingUser(row.original)}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+          ) : null}
           Edit
         </Button>
       ),
@@ -105,7 +114,7 @@ function DataTable({ data: initialData }: Props) {
   ];
 
   const table = useReactTable({
-    data: data || initialData,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -116,12 +125,14 @@ function DataTable({ data: initialData }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
+      <h1 className="text-2xl font-bold mb-6">User Management</h1>
+      <div className="flex items-center justify-between">
         <Input
           placeholder="Search users..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-sm"
+          disabled={isLoading}
         />
       </div>
       <div className="rounded-md border">
@@ -131,7 +142,7 @@ function DataTable({ data: initialData }: Props) {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-left">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -158,7 +169,7 @@ function DataTable({ data: initialData }: Props) {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-left">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -183,7 +194,7 @@ function DataTable({ data: initialData }: Props) {
         ) : null}
       </div>
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center">
         <Pagination>
           <PaginationContent>
             <PaginationItem>

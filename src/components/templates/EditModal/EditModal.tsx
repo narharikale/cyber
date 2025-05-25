@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { useUpdateUserData } from "@/hooks/updateUserData";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 type Props = {
   isOpen: boolean;
@@ -30,7 +30,7 @@ type Props = {
 };
 
 export function EditModal({ isOpen, onClose, data }: Props) {
-  const { mutate: updateUser } = useUpdateUserData();
+  const { mutate: updateUser, isPending } = useUpdateUserData();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -74,7 +74,7 @@ export function EditModal({ isOpen, onClose, data }: Props) {
                   <FormControl>
                     <Input placeholder="shadcn" {...field} />
                   </FormControl>
-                  <FormDescription>This is your name</FormDescription>
+                  
                   <FormMessage />
                 </FormItem>
               )}
@@ -86,9 +86,9 @@ export function EditModal({ isOpen, onClose, data }: Props) {
                 <FormItem>
                   <FormLabel>email</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="Update your email" {...field} />
                   </FormControl>
-                  <FormDescription>This is your email</FormDescription>
+                  
                   <FormMessage />
                 </FormItem>
               )}
@@ -100,11 +100,9 @@ export function EditModal({ isOpen, onClose, data }: Props) {
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="Update your phone" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                 
                   <FormMessage />
                 </FormItem>
               )}
@@ -116,11 +114,9 @@ export function EditModal({ isOpen, onClose, data }: Props) {
                 <FormItem>
                   <FormLabel>username</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="Update your username" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  
                   <FormMessage />
                 </FormItem>
               )}
@@ -132,16 +128,17 @@ export function EditModal({ isOpen, onClose, data }: Props) {
                 <FormItem>
                   <FormLabel>Website</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="Update your website" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+               
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={isPending}> 
+              { isPending ? <Loader2/> : ""}
+              Submit
+            </Button>
           </form>
         </Form>
       </DialogContent>
