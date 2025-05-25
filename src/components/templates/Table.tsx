@@ -19,16 +19,16 @@ import { Button } from "../ui/button";
 import { EditModal } from "./EditModal/EditModal";
 import { useState } from "react";
 import { Input } from "../ui/input";
-import { useGetUserdata } from "@/hooks/useGetUserdata";
+import { useGetUserdata } from "../../hooks/useGetUserdata";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
+import { ArrowUpDown } from "lucide-react";
 
 type Props = {
   data: User[];
@@ -38,18 +38,32 @@ function DataTable({ data: initialData }: Props) {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const itemsPerPage = 5;
 
   const { data, isLoading } = useGetUserdata({
     search: searchQuery,
     page: currentPage,
     limit: itemsPerPage,
+    sort: "id",
+    order: sortOrder,
   });
 
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: "id",
-      header: "Id",
+      header: ({ }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            className="flex items-center gap-1"
+          >
+            ID
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        );
+      },
     },
     {
       accessorKey: "name",
